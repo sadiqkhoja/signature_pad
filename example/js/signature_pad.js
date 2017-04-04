@@ -200,22 +200,33 @@ SignaturePad.prototype.fromDataURL = function (dataUrl) {
   var _this = this;
 
   var image = new Image();
-  //const ratio = window.devicePixelRatio || 1;
-  var width = this._canvas.width;
-  var height = this._canvas.height;
+  var deviceRatio = window.devicePixelRatio || 1;
+  //alert(deviceRatio);
+  var width = this._canvas.width / deviceRatio;
+  var height = this._canvas.height / deviceRatio;
 
   this._reset();
   image.src = dataUrl;
   image.onload = function () {
-    var imgWidth = image.width;
-    var imgHeight = image.height;
+    var imgWidth = image.width / deviceRatio;
+    var imgHeight = image.height / deviceRatio;
     var hRatio = width / imgWidth;
     var vRatio = height / imgHeight;
-    var ratio = Math.min(hRatio, vRatio);
 
-    var left = (width - imgWidth * ratio) / 2;
-    var top = (height - imgHeight * ratio) / 2;
-    _this._ctx.drawImage(image, 0, 0, imgWidth, imgHeight, left, top, imgWidth * ratio, imgHeight * ratio);
+    if (hRatio < 1 || vRatio < 1) {
+      //if image is bigger than canvas then fit within the canvas
+      alert('image is bigger');
+      var ratio = Math.min(hRatio, vRatio);
+
+      var left = (width - imgWidth * ratio) / 2;
+      var top = (height - imgHeight * ratio) / 2;
+      _this._ctx.drawImage(image, 0, 0, imgWidth, imgHeight, left, top, imgWidth * ratio, imgHeight * ratio);
+    } else {
+      // if image is smaller than canvas then show it in the center and don't stretch it
+      var _left = (width - imgWidth) / 2;
+      var _top = (height - imgHeight) / 2;
+      _this._ctx.drawImage(image, _left, _top, imgWidth, imgHeight);
+    }
   };
   this._isEmpty = false;
 };
