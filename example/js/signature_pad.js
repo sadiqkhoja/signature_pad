@@ -207,7 +207,11 @@ SignaturePad.prototype.fromDataURL = function (dataUrl) {
   this._reset();
   image.src = dataUrl;
   image.onload = function () {
-    _this._ctx.drawImage(image, 0, 0, width, height);
+    var imgWidth = image.width;
+    var imgHeight = image.height;
+    var left = (width - imgWidth) / 2;
+    var top = (height - imgHeight) / 2;
+    _this._ctx.drawImage(image, left, top, image.width, image.height);
   };
   this._isEmpty = false;
 };
