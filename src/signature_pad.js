@@ -94,18 +94,22 @@ SignaturePad.prototype.clear = function () {
 
 SignaturePad.prototype.fromDataURL = function (dataUrl) {
   const image = new Image();
-  const ratio = window.devicePixelRatio || 1;
-  const width = this._canvas.width / ratio;
-  const height = this._canvas.height / ratio;
+  //const ratio = window.devicePixelRatio || 1;
+  const width = this._canvas.width;
+  const height = this._canvas.height;
 
   this._reset();
   image.src = dataUrl;
   image.onload = () => {
     const imgWidth = image.width;
     const imgHeight = image.height;
-    const left = (width - imgWidth) / 2;
-    const top = (height - imgHeight) / 2;
-    this._ctx.drawImage(image, left, top, image.width, image.height);
+    const hRatio = width  / imgWidth;
+    const vRatio =  height / imgHeight;
+    const ratio  = Math.min ( hRatio, vRatio );
+
+    const left = (width - imgWidth*ratio) / 2;
+    const top = (height - imgHeight*ratio) / 2;
+    this._ctx.drawImage(image, 0,0, imgWidth, imgHeight, left,top, imgWidth*ratio,imgHeight*ratio);
   };
   this._isEmpty = false;
 };

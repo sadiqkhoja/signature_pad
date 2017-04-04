@@ -200,18 +200,22 @@ SignaturePad.prototype.fromDataURL = function (dataUrl) {
   var _this = this;
 
   var image = new Image();
-  var ratio = window.devicePixelRatio || 1;
-  var width = this._canvas.width / ratio;
-  var height = this._canvas.height / ratio;
+  //const ratio = window.devicePixelRatio || 1;
+  var width = this._canvas.width;
+  var height = this._canvas.height;
 
   this._reset();
   image.src = dataUrl;
   image.onload = function () {
     var imgWidth = image.width;
     var imgHeight = image.height;
-    var left = (width - imgWidth) / 2;
-    var top = (height - imgHeight) / 2;
-    _this._ctx.drawImage(image, left, top, image.width, image.height);
+    var hRatio = width / imgWidth;
+    var vRatio = height / imgHeight;
+    var ratio = Math.min(hRatio, vRatio);
+
+    var left = (width - imgWidth * ratio) / 2;
+    var top = (height - imgHeight * ratio) / 2;
+    _this._ctx.drawImage(image, 0, 0, imgWidth, imgHeight, left, top, imgWidth * ratio, imgHeight * ratio);
   };
   this._isEmpty = false;
 };
