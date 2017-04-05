@@ -201,7 +201,6 @@ SignaturePad.prototype.fromDataURL = function (dataUrl) {
 
   var image = new Image();
   var deviceRatio = window.devicePixelRatio || 1;
-  //alert(deviceRatio);
   var width = this._canvas.width / deviceRatio;
   var height = this._canvas.height / deviceRatio;
 
@@ -215,7 +214,6 @@ SignaturePad.prototype.fromDataURL = function (dataUrl) {
 
     if (hRatio < 1 || vRatio < 1) {
       //if image is bigger than canvas then fit within the canvas
-      alert('image is bigger');
       var ratio = Math.min(hRatio, vRatio);
 
       var left = (width - imgWidth * ratio) / 2;
